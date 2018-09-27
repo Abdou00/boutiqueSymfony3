@@ -1,0 +1,8 @@
+body{
+    text-transform: capitalize;
+    background: rgba(233, 220, 179, 0.651);
+}
+img{
+    border-bottom: 2px solid #a31d1c;
+}
+a{ text-decoration: none;}
