@@ -63,8 +63,14 @@ class Produit
     /**
      * @var string
      * @ORM\Column(name="photo", type="string", length=250, nullable=false)
+     * @ORM\OneToOne(targetEntity="BoutiqueBundle\Entity\Image", cascade={"persist"})
      */
     private $photo;
+    public function __toString()
+    {
+        $format = "Image(id: %s, url: %s, alt: %s)";
+        return sprintf($format, $this->id, $this->url, $this->alt);
+    }
 
     /**
      * @var float

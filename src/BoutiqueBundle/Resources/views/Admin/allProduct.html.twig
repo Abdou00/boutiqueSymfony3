@@ -1,0 +1,67 @@
+{% extends 'adminLayout.html.twig' %}
+{% block content %}
+<div class="jumbotron">
+  <h1 class="display-4 text-center">Dashboard</h1>
+  <hr class="my-4">
+  <p class="text-center">It uses utility classes for typography and spacing to space content out within the larger container.</p>
+  <p class="lead">
+    <a class="btn btn-primary btn-lg float-right" href="{{path('addProduct')}}" role="button">Ajouter</a>
+  </p>
+</div>
+
+<table class="table table-responsive table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Reference</th>
+      <th scope="col">Categorie</th>
+      <th scope="col">Titre</th>
+      <th scope="col">Description</th>
+      <th scope="col">Couleur</th>
+      <th scope="col">Taille</th>
+      <th scope="col">Public</th>
+      <th scope="col">Photo</th>
+      <th scope="col">Prix</th>
+      <th scope="col">Stock</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for p in produits %}
+    <tr>
+        <th>p.id_produit</th>
+        <td>{{ p.reference }}</td>
+        <td>{{ p.categorie }}</td>
+        <td>{{ p.titre }}</td>
+        <td>{{ p.description }}</td>
+        <td>{{ p.couleur }}</td>
+        <td>{{ p.taille }}</td>
+        <td>{{ p.public }}</td>
+        <td>{{ p.photo }}</td>
+        <td>{{ p.prix }}</td>
+        <td>{{ p.stock }}</td>
+        <td>
+            <ul class="list-inline">
+                <li class="list-inline-item">
+                    <a href="{{ path('showProduct', {'id': p.id_produit}) }}">
+                        <i class="far fa-eye"></i>
+                    </a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="{{ path('updateProduct', {'id': p.id_produit}) }}">
+                        <i class="far fa-edit"></i>
+                    </a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="{{ path('deleteProduct', {'id': p.id_produit}) }}">
+                        <i class="far fa-trash-alt"></i>
+                    </a>
+                </li>
+            </ul>
+        </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

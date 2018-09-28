@@ -1,0 +1,24 @@
+{% extends 'adminLayout.html.twig' %}
+
+{% block content %}
+    <div class="row">
+	 		<div class="col-md-8">
+                <img class="img-fluid" src="{{asset('/photo/' ~produit.photo)}}" alt="">
+            </div>
+
+			<div class="col-md-4">
+				<h3>Description</h3>
+				<p>{{ produit.description }}</p>
+
+				<h3>Détails</h3>
+				<ul>
+					<li>Catégorie: {{ produit.categorie }} </li>
+					<li>Couleur: {{ produit.couleur }} </li>
+					<li>Taille: {{ produit.taille }} </li>
+				</ul>
+				<h4>Prix: {{ produit.prix | number_format(2, ',', ' ') }} €</h4>
+				<br>
+				<a href="{{ path('showAllProducts') }}"> Retour au tableau</a>
+			</div><!-- .col-md-4 -->
+        </div><!-- /.row -->
+{% endblock %}

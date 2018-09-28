@@ -88,7 +88,7 @@ class Membre
      * @var integer
      * @ORM\Column(name="statut", type="integer", nullable=false)
      */
-    private $statut = 0;
+    private $statut = '0';
 
     /**
      * Get idMembre

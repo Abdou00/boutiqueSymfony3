@@ -1,0 +1,10 @@
+{% extends 'adminLayout.html.twig' %}
+{% block content %}
+    {% block title %}{{title}}{% endblock %}
+
+    {{form_start(productForm, {'attr': {'novalidate': 'novalidate'}})}}
+
+    {{form_widget(productForm)}}
+
+    {{form_end(productForm)}}
+{% endblock %}
