@@ -1,6 +1,6 @@
 <?php
 namespace BoutiqueBundle\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -10,11 +10,12 @@ use BoutiqueBundle\Entity\Produit;
 use BoutiqueBundle\Entity\Membre;
 use BoutiqueBundle\Entity\Commande;
 use BoutiqueBundle\Entity\DetailsCommande;
+use BoutiqueBundle\Form\ProduitType;
 
 class AdminController extends Controller
 {
     /**
-     * @Route("/admin/product/show", name="showAllProducts")
+     * @Route("/admin/products/show", name="showAllProducts")
     */
     public function allProductsAction()
     {
@@ -38,38 +39,24 @@ class AdminController extends Controller
         return $this -> render('@Boutique/Admin/allProduct.html.twig', $params);
     }
 
-    /**
-     * @Route("/admin/product/{id}", name="showProduct")
-    */
-    public function showProductAction($id)
-    {
-         $em = $this -> getDoctrine() -> getManager();
-        $produit = $em -> find(Produit::class, $id);
-
-        $params = array(
-            'title' => 'Dashboard',
-            'produit' => $produit
-        );
-
-        return $this -> render('@Boutique/Admin/showProduct.html.twig', $params);
-    }
-
-    /**
+     /**
      * @Route("/admin/product/add", name="addProduct")
     */
     public function addProductAction(Request $request)
     {
-        $product = new Produit;
-
+        $product = new Produit();
         $form = $this -> get('form.factory') -> create(ProduitType::class, $product);
 
-        if ($request -> isMethod('POST') && $form -> handleRequest($request) -> isValid()) {
-            $em = $this -> getDoctrine() -> getManager();
-            $em -> persist($product);
-            $em -> flush();
+        $form -> handleRequest($request);
 
-            $request -> getSession() -> getFlashBag() -> add('sucess', "Le produit à bien à été ajouté !!");
-            // return $this -> redirectToRoute('showProduct', array('id' => $product -> getId()));
+        if($form -> isSubmitted() && $form -> isValid()){
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($product);
+            $em->flush();
+
+            $request->getSession()->getFlashBag()->add('success', "Le produit à bien été ajouter.");
+
+            return $this->redirectToRoute('showProducts', array('id' => $product -> getId()));
         }
 
         $params = array(
@@ -81,11 +68,57 @@ class AdminController extends Controller
     }
 
     /**
+     * @Route("/admin/product/show/{id}", name="showProduct")
+    */
+    public function showProductAction($id)
+    {
+        $repository = $this -> getDoctrine() -> getRepository(Produit::class);
+        $produit = $repository -> find($id);
+
+        $params = array(
+            'title' => 'Dashboard',
+            'produit' => $produit
+        );
+
+        return $this -> render('@Boutique/Admin/showProduct.html.twig', $params);
+    }
+
+    /**
      * @Route("/admin/product/update/{id}", name="updateProduct")
     */
-    public function updateProductAction($id)
+    public function updateProductAction(Request $request, $id)
     {
-        return $this -> render('@Boutique/Admin/updateProduct.html.twig');
+        $em = $this -> getDoctrine() -> getManager();
+        $product = $em -> getRepository(Produit::class) -> find($id);
+
+        if (!$product) {
+            throw $this -> createNotFoundException(
+                'Aucun produit trouver pour l\'id: ' . $id
+            );
+        }
+
+        $form = $this -> createForm(ProduitType::class, $product, array(
+            'action' => $this -> generateUrl('updateProduct', array('id' => $id)),
+            'method' => 'PUT'
+        ));
+
+        $form -> handleRequest($request);
+
+        if ($form -> isSubmitted() && $form -> isValid()) {
+            $em -> persist($product);
+            $em -> flush();
+
+            $request->getSession()->getFlashBag()->add('success', "Le produit à bien été modifier.");
+
+            return $this -> redirectToRoute('showProduct', array('id' => $id));
+         }
+
+        $params = array(
+            'title' => 'Modifier',
+            'updateProductForm' => $form -> createView(),
+            'poduct' => $product
+        );
+        return $this -> render('@Boutique/Admin/updateProduct.html.twig', $params);
     }
 
     /**

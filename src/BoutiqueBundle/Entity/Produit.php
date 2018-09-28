@@ -2,6 +2,8 @@
 namespace BoutiqueBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Produit
@@ -20,66 +22,70 @@ class Produit
 
     /**
      * @var string
+     * @Assert\NotBlank(message="Ce champs est obligatoire")
      * @ORM\Column(name="reference", type="string", length=20, nullable=false)
      */
     private $reference;
 
     /**
      * @var string
+     * @Assert\NotBlank(message="Ce champs est obligatoire")
      * @ORM\Column(name="categorie", type="string", length=20, nullable=false)
      */
     private $categorie;
 
     /**
      * @var string
+     * @Assert\NotBlank(message="Ce champs est obligatoire")
      * @ORM\Column(name="titre", type="string", length=100, nullable=false)
      */
     private $titre;
 
     /**
      * @var string
+     * @Assert\NotBlank(message="Ce champs est obligatoire")
      * @ORM\Column(name="description", type="text", length=65535, nullable=false)
      */
     private $description;
 
     /**
      * @var string
+     * @Assert\NotBlank(message="Ce champs est obligatoire")
      * @ORM\Column(name="couleur", type="string", length=20, nullable=false)
      */
     private $couleur;
 
     /**
      * @var string
+     * @Assert\NotBlank(message="Ce champs est obligatoire")
      * @ORM\Column(name="taille", type="string", length=5, nullable=false)
      */
     private $taille;
 
     /**
      * @var string
+     * @Assert\NotBlank(message="Ce champs est obligatoire")
      * @ORM\Column(name="public", type="string", length=5, nullable=false)
      */
     private $public;
 
     /**
      * @var string
-     * @ORM\Column(name="photo", type="string", length=250, nullable=false)
-     * @ORM\OneToOne(targetEntity="BoutiqueBundle\Entity\Image", cascade={"persist"})
+     * @Assert\NotBlank(message="Ce champs est obligatoire")
+     * @ORM\Column(name="photo", type="string", length=5, nullable=false)
      */
     private $photo;
-    public function __toString()
-    {
-        $format = "Image(id: %s, url: %s, alt: %s)";
-        return sprintf($format, $this->id, $this->url, $this->alt);
-    }
 
     /**
      * @var float
+     * @Assert\NotBlank(message="Ce champs est obligatoire")
      * @ORM\Column(name="prix", type="float", precision=10, scale=0, nullable=false)
      */
     private $prix;
 
     /**
      * @var integer
+     * @Assert\NotBlank(message="Ce champs est obligatoire")
      * @ORM\Column(name="stock", type="integer", nullable=false)
      */
     private $stock;

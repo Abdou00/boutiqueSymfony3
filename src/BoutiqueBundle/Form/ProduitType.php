@@ -24,9 +24,10 @@ class ProduitType extends AbstractType
             ->add('couleur', TextType::class)
             ->add('taille', TextType::class)
             ->add('public', TextType::class)
-            ->add('photo', ImageType::class)
+            ->add('photo', TextType::class)
             ->add('prix', MoneyType::class)
-            ->add('stock', TextType::class);
+            ->add('stock', TextType::class)
+            -> add('save', SubmitType::class, array('label' => 'Ajouter'));
     }/**
      * {@inheritdoc}
      */

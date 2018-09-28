@@ -23,10 +23,14 @@ class Image
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(name="url", type="string", length=255, nullable=true)
+     * ORM\ManyToOne(targetEntity="BoutiqueBundle\Entity\Produit", inversedBy="photo")
      */
     private $url;
+    public function __toString()
+    {
+        $format = "Image(id: %s, url: %s, alt: %s)";
+        return $this -> $format;
+    }
 
     /**
      * @var string

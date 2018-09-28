@@ -3,7 +3,7 @@
 namespace BoutiqueBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use BoutiqueBundle\Entity\Produit;
 
 class ProduitController extends Controller
