@@ -5,7 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use BoutiqueBundle\Entity\Produit;
 use BoutiqueBundle\Entity\Membre;
 use BoutiqueBundle\Entity\Commande;
@@ -32,11 +32,22 @@ class AdminController extends Controller
 
         // Paramètres
         $params = array(
+            'title' => 'Tous les produits',
             'produits' => $produits,
             'categories' => $categories
         );
 
         return $this -> render('@Boutique/Admin/allProduct.html.twig', $params);
+    }
+
+    /**
+     * @return string
+     */
+    private function generateUniqueFileName()
+    {
+        // md5() réduit la similarité des noms de fichiers générés par
+        // uniqid(), qui est basé sur les horodatages
+        return md5(uniqid());
     }
 
      /**
@@ -50,13 +61,33 @@ class AdminController extends Controller
         $form -> handleRequest($request);
 
         if($form -> isSubmitted() && $form -> isValid()){
+            // $file stocke le fichier téléchargé
+            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
+            $file = $product->getPhoto();
+
+            $fileName = $this -> generateUniqueFileName() . '.' . $file -> guessExtension();
+
+            // Déplace le fichier dans le répertoire où sont stockées les images(images_directory) qui est défini dans app/config/config.yml(parameters)
+            try {
+                $file->move(
+                    $this->getParameter('images_directory'),
+                    $fileName
+                );
+            } catch (FileException $e) {
+                // Gérer les exceptions si quelque chose se produit pendant le téléchargement du fichier
+                $request->getSession()->getFlashBag()->add('success', "Une erreur est survenu lors du chargement du fichier!");
+            }
+
+            // met à jour la propriété 'photo' pour stocker le nom du fichier
+            // au lieu de son contenu
+            $product->setPhoto($fileName);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($product);
             $em->flush();
 
             $request->getSession()->getFlashBag()->add('success', "Le produit à bien été ajouter.");
-
-            return $this->redirectToRoute('showProducts', array('id' => $product -> getId()));
+            return $this->redirectToRoute('showAllProducts');
         }
 
         $params = array(
@@ -76,7 +107,7 @@ class AdminController extends Controller
         $produit = $repository -> find($id);
 
         $params = array(
-            'title' => 'Dashboard',
+            'title' => 'produit' . $produit,
             'produit' => $produit
         );
 
@@ -114,7 +145,7 @@ class AdminController extends Controller
          }
 
         $params = array(
-            'title' => 'Modifier',
+            'title' => 'Modifier ' . $product,
             'updateProductForm' => $form -> createView(),
             'poduct' => $product
         );
@@ -124,8 +155,16 @@ class AdminController extends Controller
     /**
      * @Route("/admin/product/delete/{id}", name="deleteProduct")
     */
-    public function deleteProductAction($id)
+    public function deleteProductAction(Request $request, $id)
     {
-        return $this -> render('@Boutique/Admin/deleteProduct.html.twig');
+        $em = $this -> getDoctrine() -> getManager();
+        $product = $em -> find(Produit::class, $id);
+
+        $em -> remove($product);
+        $em -> flush();
+
+        $request->getSession()->getFlashBag()->add('success', "Le pro$request->getSession()->getFlashBag()->add('success', "Le produit à bien été modifier.");duit ' . $id . ' à bien été supprimer.");
+        return $this -> redirectToRoute('showAllProducts');
+        // return $this -> render('@Boutique/Admin/deleteProduct.html.twig');
     }
 }

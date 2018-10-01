@@ -23,13 +23,13 @@ class Image
 
     /**
      * @var string|null
-     * ORM\ManyToOne(targetEntity="BoutiqueBundle\Entity\Produit", inversedBy="photo")
+     * @ManyToOne(targetEntity="BoutiqueBundle\Entity\Produit", inversedBy="photo")
+     * @JoinColumn(name="url", referencedColumnName="id_image")
      */
     private $url;
-    public function __toString()
+    public function __construct()
     {
-        $format = "Image(id: %s, url: %s, alt: %s)";
-        return $this -> $format;
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

@@ -3,7 +3,8 @@
 namespace BoutiqueBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ImageType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,11 +21,11 @@ class ProduitType extends AbstractType
             ->add('reference', TextType::class)
             ->add('categorie', TextType::class)
             ->add('titre', TextType::class)
-            ->add('description', TextType::class)
+            ->add('description', TextareaType::class)
             ->add('couleur', TextType::class)
             ->add('taille', TextType::class)
             ->add('public', TextType::class)
-            ->add('photo', TextType::class)
+            ->add('photo', FileType::class, array('label' => 'Parcourir...'))
             ->add('prix', MoneyType::class)
             ->add('stock', TextType::class)
             -> add('save', SubmitType::class, array('label' => 'Ajouter'));

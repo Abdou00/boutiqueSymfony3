@@ -1,1 +1,24 @@
 {% extends 'adminLayout.html.twig' %}
+{% block content %}
+{% for msg in app.session.flashbag.get('success') %}
+        <span class="alert alert-success">{{ msg }}</span>
+    {% endfor %}
+    
+    {{ form_start(deleteProductForm) }}
+    <div class="uk-modal-header">
+        <h3 class="uk-modal-title">Delete this Category?</h3>
+    </div>
+    <p>
+        Are you sure you want to delete  '{{ product.titre }}'?<br/>
+        This cannot be undone.
+    </p>
+    <div class="uk-modal-footer uk-text-right">
+        <div>
+            <button type="submit" class="md-btn md-btn-danger" title="Click to proceed!">
+                <i class="uk-icon-trash"></i> Delete
+            </button>
+            <button type="button" class="md-btn md-btn-warning uk-modal-close">Cancel</button>
+        </div>
+    </div>
+    {{ form_end(deleteProductForm) }}
+{% endblock %}

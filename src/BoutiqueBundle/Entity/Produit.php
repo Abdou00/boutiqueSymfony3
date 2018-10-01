@@ -1,5 +1,6 @@
 <?php
 namespace BoutiqueBundle\Entity;
+use BoutiqueBundle\Entity\Image;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -71,8 +72,9 @@ class Produit
 
     /**
      * @var string
+     * @ORM\Column(name="photo", type="string")
      * @Assert\NotBlank(message="Ce champs est obligatoire")
-     * @ORM\Column(name="photo", type="string", length=5, nullable=false)
+     * @Assert\File()
      */
     private $photo;
 

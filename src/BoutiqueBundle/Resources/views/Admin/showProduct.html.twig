@@ -1,6 +1,14 @@
 {% extends 'adminLayout.html.twig' %}
 
 {% block content %}
+	<div class="page-header text-center">
+        <h1>{% block title %}{{title}}{% endblock %}</h1>
+    </div>
+
+	{% for msg in app.session.flashbag.get('success') %}
+        <span class="alert alert-success">{{ msg }}</span>
+    {% endfor %}
+
     <div class="row">
 	 		<div class="col-md-8">
                 <img class="img-fluid" src="{{asset('/photo/' ~produit.photo)}}" alt="">

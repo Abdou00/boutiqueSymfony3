@@ -19,7 +19,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
         <!-- La marque -->
-       <a class="navbar-brand" href="{{path('home')}}">
+       <a class="navbar-brand" href="{{path('showAllProducts')}}">
             <img class="img-fluid" src="{{ asset('/photo/logo.png') }}" />
        </a>
 
@@ -31,7 +31,7 @@
         <!-- Le menu -->
         <div class="collapse navbar-collapse" id="nav1">
 			<ul class="navbar-nav ml-auto">
-				<li><a class="nav-link" href="{{ path('showAllProducts') }}">Dashboard</a></li>
+				<li><a class="nav-link" href="{{ path('home') }}">Retourner sur le site</a></li>
         	</ul>
         </div>
       </div>
@@ -50,7 +50,7 @@
         <hr>
         <footer>
            <div class="row">
-               <div class="col-lg-12">
+               <div class="col-lg-12 text-center">
                     <p>Copyright &copy; Ma Boutique - 2018</p>
                </div>
            </div>
